@@ -42,15 +42,11 @@ static void handle_deposit_with_expiry(ethPluginProvideParameter_t *msg, context
             if (context->memo_bytes_remaining) {
                 uint8_t offset = context->memo_length - context->memo_bytes_remaining;
                 uint8_t bytes_to_convert = MIN(PARAMETER_LENGTH, context->memo_bytes_remaining);
-                // copy_parameter(context->memo + offset,
-                //                msg->parameter,
-                //                MIN(PARAMETER_LENGTH, context->memo_bytes_remaining));
-
                 hex_to_ascii(context->memo + offset, msg->parameter, bytes_to_convert);
                 context->memo_bytes_remaining -= bytes_to_convert;
             } else {
                 /* Append null terminator to memo */
-                memmove(&(context->memo[MIN(memo_length, THORCHAIN_MEMO_MAX_LEN)], '\0', sizeof(uint8_t));
+                context->memo[MIN(memo_length - 1, THORCHAIN_MEMO_MAX_LEN)] = '/0';
                 parse_memo(context);
                 context->next_param = UNEXPECTED_PARAMETER;
             }

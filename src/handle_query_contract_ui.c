@@ -74,6 +74,21 @@ static void set_memo_limit_ui(ethQueryContractUI_t *msg, context_t *context) {
 
 static void set_memo_affiliate_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Affiliate", msg->titleLength);
+    // Prefix the address with `0x`.
+    msg->msg[0] = '0';
+    msg->msg[1] = 'x';
+
+    // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
+    // Setting it to `0` will make it work with every chainID :)
+    uint64_t chainid = 0;
+
+    // Get the string representation of the address stored in `context->beneficiary`. Put it in
+    // `msg->msg`.
+    getEthAddressStringFromBinary(
+        context->affiliate,
+        msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+        msg->pluginSharedRW->sha3,
+        chainid);
 }
 
 static void set_memo_fee_ui(ethQueryContractUI_t *msg, context_t *context) {
