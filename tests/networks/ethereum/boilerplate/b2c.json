@@ -2,12 +2,12 @@
     "chainId": 1,
     "contracts": [
         {
-            "address": "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
-            "contractName": "UniswapV2",
+            "address": "0xc145990e84155416144c532e31f89b840ca8c2ce",
+            "contractName": "THORChain_Router",
             "selectors": {
                 "0x44bc937b": {
                     "erc20OfInterest": [
-                        "path.1"
+                        "asset"
                     ],
                     "method": "depositWithExpiry",
                     "plugin": "THORChain Router"
