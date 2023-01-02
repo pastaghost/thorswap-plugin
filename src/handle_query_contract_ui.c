@@ -85,7 +85,7 @@ static void set_memo_affiliate_ui(ethQueryContractUI_t *msg, context_t *context)
     // Get the string representation of the address stored in `context->beneficiary`. Put it in
     // `msg->msg`.
     getEthAddressStringFromBinary(
-        context->affiliate,
+        context->memo_data->affiliate,
         msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
         msg->pluginSharedRW->sha3,
         chainid);
@@ -111,7 +111,7 @@ void handle_query_contract_ui(void *parameters) {
     // EDIT THIS: Adapt the cases for the screens you'd like to display.
     switch (msg->screenIndex) {
         case 0:
-            set_vault_ui(msg);
+            set_vault_ui(msg, context);
             break;
         case 1:
             set_asset_ui(msg, context);
