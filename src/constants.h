@@ -1,0 +1,1 @@
+#define THORCHAIN_MEMO_MAX_LEN 250

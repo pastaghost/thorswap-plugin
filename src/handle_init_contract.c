@@ -1,4 +1,6 @@
 #include "thorchain_router_plugin.h"
+#include "memo.h"
+#include "storage.h"
 
 static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
     for (selector_t i = 0; i < n; i++) {
@@ -57,6 +59,10 @@ void handle_init_contract(void *parameters) {
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             return;
     }
+
+    memset(&memo_data, 0, sizeof(memo_t));
+    context->memo = (uint8_t *) &memo_str;
+    context->memo_data = &memo_data;
 
     // Return valid status.
     msg->result = ETH_PLUGIN_RESULT_OK;
