@@ -12,7 +12,9 @@ void handle_provide_token(void *parameters) {
         // Store its decimals.
         context->decimals = msg->item1->token.decimals;
         // Store its ticker.
-        strlcpy(context->ticker, (char *) msg->item1->token.ticker, sizeof(context->ticker));
+        strlcpy((char *) context->ticker,
+                (char *) msg->item1->token.ticker,
+                sizeof(context->ticker));
 
         // Keep track that we found the token.
         context->token_found = true;
@@ -23,7 +25,7 @@ void handle_provide_token(void *parameters) {
         /* Default to ETH decimal precision */
         context->decimals = 18;
         /* Default to "???" when information was not found. */
-        strlcpy(context->ticker, "???", sizeof(context->ticker));
+        strlcpy((char *) context->ticker, "???", sizeof(context->ticker));
 
         // If we wanted to add a screen, say a warning screen for example, we
         // could instruct the ethereum app to add an additional screen by
