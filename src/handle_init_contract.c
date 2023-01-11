@@ -1,6 +1,5 @@
 #include "thorchain_router_plugin.h"
 #include "memo.h"
-#include "storage.h"
 
 static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
     for (selector_t i = 0; i < n; i++) {
