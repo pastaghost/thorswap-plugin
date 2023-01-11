@@ -14,8 +14,12 @@ int parse_memo(memo_t *memo, char *str) {
         return ERROR_INVALID_PARAMETERS;
     }
 
-    memset(memo, 0, sizeof(memo_t));  // Clear out any junk that might be in struct
-    strcpy(cpy_str, str);  // Copy str into new buffer because strsep() modifies the input buffer
+    /* Clear out any junk that might be in struct */
+    memset(memo, 0, sizeof(memo_t));
+
+    /* Copy str into new buffer because strsep() modifies the input buffer */
+    strncpy(cpy_str, str, (sizeof(cpy_str) / sizeof(char)));
+
     uint8_t *fields[] = {
         NULL,  // Leave me set to NULL since we're throwing away the message prefix (s,=,etc.)
         (uint8_t *) &(memo->asset),
@@ -39,7 +43,7 @@ int parse_memo(memo_t *memo, char *str) {
     for (uint8_t i = 1; i < (sizeof(fields) / sizeof(uint8_t *)); i++) {
         token = strsep(&cpy_str_addr, delim);
         if (*token != '\0') {
-            strcpy((char *) fields[i], token);
+            strncpy((char *) fields[i], token, sizeof(fields[i]) / sizeof(char));
             memo->fields |= 1UL << (i - 1);
         }
     }
