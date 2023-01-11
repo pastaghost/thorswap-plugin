@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include "constants.h"
 #include "memo.h"
 #include "thorchain_router_plugin.h"
 #include "utils.h"
