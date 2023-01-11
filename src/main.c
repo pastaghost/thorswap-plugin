@@ -24,16 +24,14 @@
 
 #include "thorswap_router_plugin.h"
 
-// List of selectors supported by this plugin.
-// EDIT THIS: Adapt the variable names and change the `0x` values to match your selectors.
-static const uint32_t DEPOSIT_WITH_EXPIRY_SELECTOR = 0x44bc937b;
+// ---------- THORSwap Router V2 -------------
+// Function: depositWithExpiry(address vault, address asset, uint amount, string memo, uint expiry)
+// Selector: 0x44bc937b
+static const uint32_t THORSWAP_ROUTER_DEPOSIT_WITH_EXPIRY_SELECTOR = {0x44, 0xbc, 0x93, 0x7b};
 
-// Array of all the different boilerplate selectors. Make sure this follows the same order as the
-// enum defined in `thorswap_router_plugin.h`
-// EDIT THIS: Use the names of the array declared above.
-const uint32_t THORSWAP_ROUTER_SELECTORS[NUM_SELECTORS] = {DEPOSIT_WITH_EXPIRY_SELECTOR};
+const uint32_t THORSWAP_ROUTER_SELECTORS[NUM_SELECTORS] = {
+    THORSWAP_ROUTER_DEPOSIT_WITH_EXPIRY_SELECTOR};
 
-// Function to dispatch calls from the ethereum app.
 void dispatch_plugin_calls(int message, void *parameters) {
     switch (message) {
         case ETH_PLUGIN_INIT_CONTRACT:
@@ -70,7 +68,6 @@ void handle_query_ui_exception(unsigned int *args) {
     }
 }
 
-// Calls the ethereum app.
 void call_app_ethereum() {
     unsigned int libcall_params[3];
     libcall_params[0] = (unsigned int) "Ethereum";
