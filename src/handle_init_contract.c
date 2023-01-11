@@ -60,9 +60,9 @@ void handle_init_contract(void *parameters) {
             return;
     }
 
-    memset(&memo_data, 0, sizeof(memo_t));
-    context->memo = (uint8_t *) &memo_str;
-    context->memo_data = &memo_data;
+    // Initialize struct to hold memo data and store a reference to the struct in the app context
+    memset(&parsed_memo, 0, sizeof(memo_t));
+    context->memo = &parsed_memo;
 
     // Return valid status.
     msg->result = ETH_PLUGIN_RESULT_OK;
