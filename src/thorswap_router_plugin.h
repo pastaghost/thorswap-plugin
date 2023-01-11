@@ -11,7 +11,7 @@
 
 // Name of the plugin.
 // EDIT THIS: Replace with your plugin name.
-#define PLUGIN_NAME "THORChain Router"
+#define PLUGIN_NAME "THORSwap Router"
 
 // Enumeration of the different selectors possible.
 // Should follow the exact same order as the array declared in main.c
@@ -33,7 +33,7 @@ typedef enum {
 } parameter;
 
 // EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
-extern const uint32_t THORCHAIN_ROUTER_SELECTORS[NUM_SELECTORS];
+extern const uint32_t THORSWAP_ROUTER_SELECTORS[NUM_SELECTORS];
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 // EDIT THIS: This struct is used by your plugin to save the parameters you parse. You

@@ -1,4 +1,4 @@
-#include "thorchain_router_plugin.h"
+#include "thorswap_router_plugin.h"
 
 // Sets the first screen to display.
 void handle_query_contract_id(void *parameters) {

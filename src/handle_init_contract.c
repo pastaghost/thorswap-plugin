@@ -1,4 +1,4 @@
-#include "thorchain_router_plugin.h"
+#include "thorswap_router_plugin.h"
 #include "memo.h"
 
 static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
@@ -38,7 +38,7 @@ void handle_init_contract(void *parameters) {
 
     uint32_t selector = U4BE(msg->selector, 0);
     if (find_selector(selector,
-                      THORCHAIN_ROUTER_SELECTORS,
+                      THORSWAP_ROUTER_SELECTORS,
                       NUM_SELECTORS,
                       &context->selectorIndex)) {
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
