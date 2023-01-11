@@ -43,12 +43,10 @@ typedef struct context_t {
     uint8_t vault[ADDRESS_LENGTH];
     uint8_t asset[ADDRESS_LENGTH];
     uint8_t amount[INT256_LENGTH];
-    uint8_t memo_offset;  // Offset will always be 160 bytes, so uint8_t is fine here
+    uint16_t memo_offset;
     uint16_t memo_length;
     uint16_t memo_bytes_remaining;  // Remaining number of bytes to parse
-    uint8_t *memo;                  // string representation of memo
-    memo_t *memo_data;              // Parsed memo data
-    uint8_t memo_num_fields;
+    memo_t *memo;                   // Parsed memo data
     uint8_t expiration[INT256_LENGTH];
     uint8_t token_found;
     uint8_t decimals;
@@ -74,6 +72,3 @@ void handle_init_contract(void *parameters);
 void handle_finalize(void *parameters);
 void handle_provide_token(void *parameters);
 void handle_query_contract_id(void *parameters);
-
-void parse_memo(context_t *context);
-size_t hex_to_ascii(uint8_t *ascii_buf, const uint8_t *hex_buf, size_t hex_buf_len);
