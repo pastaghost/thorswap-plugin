@@ -1,8 +1,12 @@
 #include <string.h>
 #include <stdio.h>
+#include "memo.h"
 #include "thorchain_router_plugin.h"
+#include "utils.h"
 
 static void handle_deposit_with_expiry(ethPluginProvideParameter_t *msg, context_t *context) {
+    static char memo_str[THORCHAIN_MEMO_MAX_LEN] = {'\0'};
+
     if (context->go_to_offset) {
         if (msg->parameterOffset != context->offset + SELECTOR_SIZE) {
             return;
@@ -10,15 +14,15 @@ static void handle_deposit_with_expiry(ethPluginProvideParameter_t *msg, context
         context->go_to_offset = false;
     }
     switch (context->next_param) {
-        case VAULT:  // THORChain vault address
+        case VAULT:
             copy_address(context->vault, msg->parameter, sizeof(context->vault));
             context->next_param = ASSET;
             break;
-        case ASSET:  // Asset contract address
+        case ASSET:
             copy_address(context->asset, msg->parameter, sizeof(context->asset));
             context->next_param = AMOUNT;
             break;
-        case AMOUNT:  // to
+        case AMOUNT:
             copy_parameter(context->amount, msg->parameter, sizeof(context->amount));
             context->next_param = MEMO_OFFSET;
             break;
@@ -27,7 +31,7 @@ static void handle_deposit_with_expiry(ethPluginProvideParameter_t *msg, context
                 U2BE(msg->parameter, PARAMETER_LENGTH - sizeof(context->memo_offset));
             context->next_param = EXPIRATION;
             break;
-        case EXPIRATION:  // path[1] -> contract address of token received
+        case EXPIRATION:
             copy_parameter(context->expiration, msg->parameter, sizeof(context->expiration));
             context->next_param = MEMO_LENGTH;
             break;
@@ -38,17 +42,60 @@ static void handle_deposit_with_expiry(ethPluginProvideParameter_t *msg, context
             context->next_param = MEMO;
             break;
         case MEMO:
+            if (context->memo_length > THORCHAIN_MEMO_MAX_LEN) {
+                PRINTF("Invalid memo length. %d > 250 bytes\n", context->memo_length);
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                break;
+            }
             if (context->memo_bytes_remaining) {
-                uint8_t offset = context->memo_length - context->memo_bytes_remaining;
-                uint8_t bytes_to_convert = MIN(PARAMETER_LENGTH, context->memo_bytes_remaining);
-                hex_to_ascii(context->memo + offset, msg->parameter, bytes_to_convert);
-                context->memo_bytes_remaining -= bytes_to_convert;
+                uint8_t memo_str_offset = context->memo_length - context->memo_bytes_remaining;
+                uint8_t n_bytes_to_convert = MIN(PARAMETER_LENGTH, context->memo_bytes_remaining);
+                hex_to_ascii((const char *) (&memo_str + memo_str_offset),
+                             msg->parameter,
+                             n_bytes_to_convert);
+                context->memo_bytes_remaining -= n_bytes_to_convert;
             } else {
-                /* Append null terminator to memo */
-                context->memo[MIN((context->memo_length) - 1, THORCHAIN_MEMO_MAX_LEN)] = '\0';
-                parse_memo(context);
+                /* Append null terminator to memo and parse */
+                memo_str[MIN((context->memo_length) - 1, THORCHAIN_MEMO_MAX_LEN)] = '\0';
+                int error = parse_memo(context->memo, (char *) memo_str);
+                switch (error) {
+                    case ERROR_NONE:
+                        break;
+                    case ERROR_INVALID_PARAMETERS:
+                        PRINTF("Function parse_memo() called with invalid parameters\n");
+                        break;
+                    case ERROR_INVALID_MEMO_PREFIX:
+                        PRINTF("Invalid memo prefix.\n");
+                        break;
+                    case ERROR_MISSING_ASSET:
+                        PRINTF("Memo is missing asset field\n");
+                        break;
+                    case ERROR_MISSING_DEST_ADDR:
+                        PRINTF("Memo is missing dest_addr field\n");
+                        break;
+                    case ERROR_MISSING_AFFILIATE:
+                        PRINTF("Memo is missing affiliate field\n");
+                        break;
+                    case ERROR_MISSING_DEX_AGGREGATOR_ADDR:
+                        PRINTF("Memo is missing dex_aggregator_addr field\n");
+                        break;
+                    case ERROR_MISSING_FINAL_TOKEN_ADDR:
+                        PRINTF("Memo is missing final_token_addr field\n");
+                        break;
+                    case ERROR_MISSING_MIN_AMOUNT_OUT:
+                        PRINTF("Memo is missing min_amount_out field\n");
+                        break;
+                    default:
+                        PRINTF("parse_memo() returned unexpected value: %d", error);
+                        break;
+                }
+                if (error != 0) {
+                    msg->result = ETH_PLUGIN_RESULT_ERROR;
+                    break;
+                }
                 context->next_param = UNEXPECTED_PARAMETER;
             }
+
             break;
 
         // Keep this
@@ -82,65 +129,4 @@ void handle_provide_parameter(void *parameters) {
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             break;
     }
-}
-
-void parse_memo(context_t *context) {
-    char *tokens[6];
-
-    /* Bail early if we don't have any memo data to parse */
-    if (!strlen((const char *) context->memo)) {
-        return;
-    }
-
-    /* Parse and discard handler token ex: (Swap, s, =) */
-    tokens[0] = strtok((char *) context->memo, ":");
-    for (int i = 1; i < 6; i++) {
-        tokens[i] = strtok(NULL, ":");
-    }
-
-    context->memo_num_fields = 0;
-
-    /* Parse remaining memo data from string (asset, dest_addr, limit, affiliate, fee) */
-    if (tokens[1] != NULL) {
-        strncpy((char *) &(context->memo_data->asset),
-                tokens[1],
-                sizeof(context->memo_data->asset) / sizeof(uint8_t));
-        context->memo_num_fields++;
-    }
-
-    if (tokens[2] != NULL) {
-        strncpy((char *) &(context->memo_data->dest_addr),
-                tokens[2],
-                sizeof(context->memo_data->dest_addr) / sizeof(uint8_t));
-        context->memo_num_fields++;
-    }
-
-    if (tokens[3] != NULL) {
-        strncpy((char *) &(context->memo_data->limit),
-                tokens[3],
-                sizeof(context->memo_data->limit) / sizeof(uint8_t));
-        context->memo_num_fields++;
-    }
-
-    if (tokens[4] != NULL) {
-        strncpy((char *) &(context->memo_data->affiliate),
-                tokens[4],
-                sizeof(context->memo_data->affiliate) / sizeof(uint8_t));
-        context->memo_num_fields++;
-    }
-
-    if (tokens[5] != NULL) {
-        strncpy((char *) &(context->memo_data->fee),
-                tokens[5],
-                sizeof(context->memo_data->fee) / sizeof(uint8_t));
-        context->memo_num_fields++;
-    }
-}
-
-size_t hex_to_ascii(uint8_t *ascii_buf, const uint8_t *hex_buf, size_t hex_buf_len) {
-    size_t i = 0, r = 0;
-    for (i = 0; i < hex_buf_len; i++) {
-        r += sprintf((char *) ascii_buf + 2 * i, "%02x", hex_buf[i]);
-    }
-    return r;
 }
