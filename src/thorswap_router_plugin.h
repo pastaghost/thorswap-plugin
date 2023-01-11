@@ -5,21 +5,11 @@
 #include "memo.h"
 #include <string.h>
 
-// Number of selectors defined in this plugin. Should match the enum `selector_t`.
-// EDIT THIS: Put in the number of selectors your plugin is going to support.
 #define NUM_SELECTORS 1
 
-// Name of the plugin.
-// EDIT THIS: Replace with your plugin name.
-#define PLUGIN_NAME "THORSwap Router"
+#define PLUGIN_NAME "THORSwap_Router_V2"
 
-// Enumeration of the different selectors possible.
-// Should follow the exact same order as the array declared in main.c
-// EDIT THIS: Change the naming (`selector_t`), and add your selector names.
 typedef enum { DEPOSIT_WITH_EXPIRY = 0 } selector_t;
-
-// Enumeration used to parse the smart contract data.
-// EDIT THIS: Adapt the parameter names here.
 
 typedef enum {
     VAULT = 0,    // Vault address
@@ -32,14 +22,11 @@ typedef enum {
     UNEXPECTED_PARAMETER
 } parameter;
 
-// EDIT THIS: Rename `BOILERPLATE` to be the same as the one initialized in `main.c`.
 extern const uint32_t THORSWAP_ROUTER_SELECTORS[NUM_SELECTORS];
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
-// EDIT THIS: This struct is used by your plugin to save the parameters you parse. You
-// will need to adapt this struct to your plugin.
 typedef struct context_t {
-    // For display.
+    // 133/160 bytes used. TODO: Verify this.
     uint8_t vault[ADDRESS_LENGTH];
     uint8_t asset[ADDRESS_LENGTH];
     uint8_t amount[INT256_LENGTH];
@@ -54,7 +41,7 @@ typedef struct context_t {
 
     // For parsing data.
     uint8_t next_param;  // Set to be the next param we expect to parse.
-    uint16_t offset;     // Offset at which the array or struct starts.
+    uint16_t offset;     // Offset at which the array or struct starts .
     bool go_to_offset;   // If set, will force the parsing to iterate through parameters until
                          // `offset` is reached.
 
