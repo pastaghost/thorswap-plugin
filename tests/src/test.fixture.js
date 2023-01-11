@@ -34,7 +34,7 @@ const nano_models: DeviceModel[] = [
 ];
 
 
-const thorchainswapJSON = generate_plugin_config();
+const thorswapRouterJSON = generate_plugin_config();
 
 const SPECULOS_ADDRESS = '0xFE984369CE3919AA7BB4F431082D027B4F8ED70C';
 const RANDOM_ADDRESS = '0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj'
@@ -81,36 +81,122 @@ function txFromEtherscan(rawTx) {
     return txType + encoded;
 }
 
-function zemu(device, func) {
+/**
+ * Emulation of the device using zemu
+ * @param {string} device name of the device to emulate (nanos, nanox)
+ * @param {function} func
+ * @param {boolean} signed the plugin is already signed
+ * @returns {Promise}
+ */
+function zemu(device, func, signed = false, testNetwork="ethereum") {
     return async () => {
-        jest.setTimeout(TIMEOUT);
-        let elf_path;
-        let lib_elf;
-        elf_path = device.eth_path;
-        lib_elf = { 'THORChain Swap': device.path };
-
-        const sim = new Zemu(elf_path, lib_elf);
-        try {
-            await sim.start({...sim_options_nano, model: device.name});
-            const transport = await sim.getTransport();
-            const eth = new Eth(transport);
-            eth.setLoadConfig({
-                baseURL: null,
-                extraPlugins: thorchainswapJSON,
-            });
-            await func(sim, eth);
-        } finally {
-            await sim.close();
+      jest.setTimeout(TIMEOUT);
+      let eth_path;
+      let plugin;
+      let sim_options = sim_options_generic;
+  
+      if (device === "nanos") {
+        eth_path = NANOS_ETH_PATH;
+        plugin = NANOS_PLUGIN;
+        sim_options.model = "nanos";
+      } else {
+        eth_path = NANOX_ETH_PATH;
+        plugin = NANOX_PLUGIN;
+        sim_options.model = "nanox";
+      }
+  
+      const sim = new Zemu(eth_path, plugin);
+  
+      try {
+        await sim.start(sim_options);
+        const transport = await sim.getTransport();
+        const eth = new Eth(transport);
+  
+        if(!signed){
+          eth.setPluginsLoadConfig({
+            baseURL: null,
+            extraPlugins: generate_plugin_config(testNetwork),
+          });
         }
+        await func(sim, eth);
+      } finally {
+        await sim.close();
+      }
     };
-}
-
-module.exports = {
-    zemu,
-    waitForAppScreen,
+  }
+  
+  /**
+   * Process the trasaction through the full test process in interaction with the simulator
+   * @param {Eth} eth Device to test (nanos, nanox)
+   * @param {function} sim Zemu simulator
+   * @param {int} steps Number of steps to push right button
+   * @param {string} label directory against which the test snapshots must be checked.
+   * @param {string} rawTxHex RawTransaction Hex to process
+   */
+  async function processTransaction(eth, sim, steps, label, rawTxHex,srlTx="") {
+  
+    let serializedTx;
+  
+    if(srlTx == "")
+      serializedTx = txFromEtherscan(rawTxHex);
+    else
+      serializedTx = srlTx;
+  
+    let tx = eth.signTransaction("44'/60'/0'/0/0", serializedTx);
+  
+    await sim.waitUntilScreenIsNot(
+      sim.getMainMenuSnapshot(),
+      transactionUploadDelay
+    );
+    await sim.navigateAndCompareSnapshots(".", label, [steps, 0]);
+  
+    await tx;
+  }
+  
+  /**
+   * Function to execute test with the simulator
+   * @param {Object} device Device including its name, its label, and the number of steps to process the use case
+   * @param {string} contractName Name of the contract
+   * @param {string} testLabel Name of the test case
+   * @param {string} testDirSuffix Name of the folder suffix for snapshot comparison
+   * @param {string} rawTxHex RawTx Hex to test
+   * @param {boolean} signed The plugin is already signed and existing in Ledger database
+   */
+  function processTest(device, contractName, testLabel, testDirSuffix, rawTxHex, signed, serializedTx, testNetwork="ethereum" ) {
+    test(
+      "[" + contractName + "] - " + device.label + " - " + testLabel,
+      zemu(device.name, async (sim, eth) => {
+        await processTransaction(
+          eth,
+          sim,
+          device.steps,
+          testNetwork+ "_" + device.name + "_" + testDirSuffix,
+          rawTxHex,
+          serializedTx
+        );
+      },signed, testNetwork)
+    );
+  }
+  
+  
+  function populateTransaction(contractAddr, inputData, chainId, value="0.1"){
+    // Get the generic transaction template
+    let unsignedTx = genericTx;
+    //adapt to the appropriate network
+    unsignedTx.chainId = chainId;
+    // Modify `to` to make it interact with the contract
+    unsignedTx.to = contractAddr;
+    // Modify the attached data
+    unsignedTx.data = inputData;
+    // Modify the number of ETH sent
+    unsignedTx.value = parseEther(value);
+    // Create serializedTx and remove the "0x" prefix
+    return ethers.utils.serializeTransaction(unsignedTx).slice(2);
+  }
+  
+  
+  module.exports = {
+    processTest,
     genericTx,
-    nano_models,
-    SPECULOS_ADDRESS,
-    RANDOM_ADDRESS,
-    txFromEtherscan,
-}
+    populateTransaction
+  };
