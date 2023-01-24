@@ -22,15 +22,15 @@
 #include "os.h"
 #include "cx.h"
 
-#include "thorswap_router_plugin.h"
+#include "thorchain_router_v4_plugin.h"
 
-// ---------- THORSwap Router V2 -------------
+// ---------- THORChain Router v4 -------------
 // Function: depositWithExpiry(address vault, address asset, uint amount, string memo, uint expiry)
 // Selector: 0x44bc937b
-static const uint32_t THORSWAP_ROUTER_DEPOSIT_WITH_EXPIRY_SELECTOR = {0x44, 0xbc, 0x93, 0x7b};
+static const uint32_t THORCHAIN_ROUTER_V4_DEPOSIT_WITH_EXPIRY_SELECTOR = {0x44, 0xbc, 0x93, 0x7b};
 
-const uint32_t THORSWAP_ROUTER_SELECTORS[NUM_SELECTORS] = {
-    THORSWAP_ROUTER_DEPOSIT_WITH_EXPIRY_SELECTOR};
+const uint32_t THORCHAIN_ROUTER_SELECTORS[NUM_SELECTORS] = {
+    THORCHAIN_ROUTER_V4_DEPOSIT_WITH_EXPIRY_SELECTOR};
 
 void dispatch_plugin_calls(int message, void *parameters) {
     switch (message) {

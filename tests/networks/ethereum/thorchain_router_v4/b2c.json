@@ -3,17 +3,17 @@
     "contracts": [
         {
             "address": "0xc145990e84155416144c532e31f89b840ca8c2ce",
-            "contractName": "THORSwap_Router_V2",
+            "contractName": "THORChain_Router_v4",
             "selectors": {
                 "0x44bc937b": {
                     "erc20OfInterest": [
                         "asset"
                     ],
                     "method": "depositWithExpiry",
-                    "plugin": "THORSwap_Router_V2"
+                    "plugin": "THORChain_Router_v4"
 		        }
 	        }
 	    }
     ],
-    "name": "THORSwap_Router_V2"
+    "name": "THORChain_Router_v4"
 }

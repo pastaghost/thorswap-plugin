@@ -7,7 +7,7 @@
 
 #define NUM_SELECTORS 1
 
-#define PLUGIN_NAME "THORSwap_Router_V2"
+#define PLUGIN_NAME "THORChain_Router_v4"
 
 typedef enum { DEPOSIT_WITH_EXPIRY = 0 } selector_t;
 
@@ -22,7 +22,7 @@ typedef enum {
     UNEXPECTED_PARAMETER
 } parameter;
 
-extern const uint32_t THORSWAP_ROUTER_SELECTORS[NUM_SELECTORS];
+extern const uint32_t THORCHAIN_ROUTER_SELECTORS[NUM_SELECTORS];
 
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 typedef struct context_t {

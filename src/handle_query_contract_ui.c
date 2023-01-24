@@ -1,4 +1,4 @@
-#include "thorswap_router_plugin.h"
+#include "thorchain_router_v4_plugin.h"
 
 static void set_vault_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Vault", msg->titleLength);

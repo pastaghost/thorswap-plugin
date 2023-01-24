@@ -34,7 +34,7 @@ const nano_models: DeviceModel[] = [
 ];
 
 
-const thorswapRouterJSON = generate_plugin_config();
+const thorchainRouterV4JSON = generate_plugin_config();
 
 const SPECULOS_ADDRESS = '0xFE984369CE3919AA7BB4F431082D027B4F8ED70C';
 const RANDOM_ADDRESS = '0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj'

@@ -4,7 +4,7 @@
 NANOS_SDK=$NANOS_SDK
 NANOSP_SDK=$NANOSP_SDK
 NANOX_SDK=$NANOX_SDK
-APP_ETHEREUM=${APP_ETHEREUM:-"/thorswap-router-v2-plugin-dev/app-ethereum"}
+APP_ETHEREUM=${APP_ETHEREUM:-"/thorchain-router-v4-plugin-dev/app-ethereum"}
 
 set -e
 

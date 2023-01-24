@@ -1,20 +1,6 @@
-# app-plugin-boilerplate
+# THORChain Router v4 Plugin
 
-This repo is a meant to be a forkable example of a plugin.
-
-Plugins are lightweight applications that go hand-in-hand with the Ethereum
-Application on a Nano S / X device.
-
-They allow users to safely interact with smart contracts by parsing the
-transaction data and displaying its content in a human readable way. This is
-done on a "per contract" basis, meaning a plugin is required for every DApp.
-
-The code has been commented, and special "EDIT THIS" comments indicate where
-developers are expected to adapt the code to their own needs.
-
-It is STRONGLY recommended to follow the
-[plugin guide](https://developers.ledger.com/docs/dapp/nano-plugin/overview/)
-in order to better understand the flow and the context for plugins.
+Ledger app plugin for the [THORChain Router v2 Contract](https://etherscan.io/address/0xD37BbE5744D730a1d98d8DC97c42F0Ca46aD7146#code)
 
 ## Ethereum SDK
 

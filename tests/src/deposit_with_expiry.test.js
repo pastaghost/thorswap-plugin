@@ -5,9 +5,9 @@ import { ethers } from "ethers";
 import { parseEther, parseUnits} from "ethers/lib/utils";
 
 
-const contractName = "THORSwap Router V2"
+const contractName = "THORChain Router v4"
 const contractAddr = "0xC145990E84155416144C532E31f89B840Ca8c2cE";
-const pluginName = "thorswap-router-v2";
+const pluginName = "thorchain-router-v4";
 const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddr + '.json';
 const abi = require(abi_path);
 
