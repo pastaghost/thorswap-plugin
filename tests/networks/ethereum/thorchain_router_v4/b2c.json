@@ -10,10 +10,10 @@
                         "asset"
                     ],
                     "method": "depositWithExpiry",
-                    "plugin": "THORChain_Router_v4"
+                    "plugin": "THORSwap"
 		        }
 	        }
 	    }
     ],
-    "name": "THORChain_Router_v4"
+    "name": "THORSwap"
 }

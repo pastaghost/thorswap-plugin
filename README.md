@@ -1,4 +1,4 @@
-# THORChain Router v4 Plugin
+# THORSwap Plugin
 
 Ledger app plugin for the [THORChain Router v2 Contract](https://etherscan.io/address/0xD37BbE5744D730a1d98d8DC97c42F0Ca46aD7146#code)
 

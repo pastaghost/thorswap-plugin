@@ -1,4 +1,4 @@
-#include "thorchain_router_v4_plugin.h"
+#include "thorswap_plugin.h"
 #include "memo.h"
 
 void handle_finalize(void *parameters) {

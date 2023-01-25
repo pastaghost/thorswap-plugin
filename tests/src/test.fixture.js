@@ -25,8 +25,8 @@ const NANOS_PLUGIN_PATH = Resolve('elfs/plugin_nanos.elf');
 const NANOSP_PLUGIN_PATH = Resolve('elfs/plugin_nanosp.elf');
 const NANOX_PLUGIN_PATH = Resolve('elfs/plugin_nanox.elf');
 
-const NANOS_PLUGIN = { THORChain_Router_V4: NANOS_PLUGIN_PATH };
-const NANOX_PLUGIN = { THORChain_Router_V4: NANOX_PLUGIN_PATH };
+const NANOS_PLUGIN = { THORSwap: NANOS_PLUGIN_PATH };
+const NANOX_PLUGIN = { THORSwap: NANOX_PLUGIN_PATH };
 
 const SPECULOS_ADDRESS = "0xFE984369CE3919AA7BB4F431082D027B4F8ED70C";
 const RANDOM_ADDRESS = "0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj";

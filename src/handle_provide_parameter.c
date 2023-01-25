@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "constants.h"
 #include "memo.h"
-#include "thorchain_router_v4_plugin.h"
+#include "thorswap_plugin.h"
 #include "utils.h"
 
 static void handle_deposit_with_expiry(ethPluginProvideParameter_t *msg, context_t *context) {
