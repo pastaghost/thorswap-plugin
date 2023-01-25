@@ -1,40 +1,13 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
-import { genericTx, nano_models } from './test.fixture';
-import { ethers } from "ethers";
-import { parseEther, parseUnits} from "ethers/lib/utils";
-
+import { processTest } from "./test.fixture";
 
 const contractName = "THORChain Router v4"
-const contractAddr = "0xC145990E84155416144C532E31f89B840Ca8c2cE";
-const pluginName = "thorchain-router-v4";
-const abi_path = `../networks/${testNetwork}/${pluginName}/abis/` + contractAddr + '.json';
-const abi = require(abi_path);
-
-const contract = new ethers.Contract(contractAddr, abi);
-
-
-const vault ="0xa58dca25971fa9e0c809e12995f65b0a32156fb5";
-const asset_ethereum ="0x0000000000000000000000000000000000000000";
-const amount = parseUnits("43073650000000000", 'wei');
-const memo_valid_standard = "=:AVAX.AVAX:0x681B29a3f3230Cb9Ad1247922BAA8E6a983466Eb:0:t:30"
-const expiration = 1658875582
-
-const {data} = (async () => {await contract.populateTransaction.depositWithExpiry(vault, asset_ethereum, amount, memo_valid_standard, expiration);})();
-
-
-let unsignedTx = genericTx;
-unsignedTx.to = contractAddr;
-unsignedTx.data = data;
-unsignedTx.value = parseEther("0.1");
-
-// Create serializedTx and remove the "0x" prefix
-const serializedTx = ethers.utils.serializeTransaction(unsignedTx).slice(2);
-
-
-const testLabel = "DepositWithExpiry(Valid Standard)"; // <= Name of the test
-const testDirSuffix = "deposit_with_expiry_valid_standard"; // <= directory to compare device snapshots to
+// From : https://etherscan.io/tx/0xdeea9126dd842d39d217de2d79e1c0dfb36d021e67388d3ea45fdca89d19d7f7
+const rawTxHex =
+  "0x44bc937b000000000000000000000000a9ce88d2a853836e9da4886e6ac569c02b59d00300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005bd5440154d9600000000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000063d0f1390000000000000000000000000000000000000000000000000000000000000047535741503a54484f522e52554e453a74686f72317432706673637571336374677466356833783770367a726a643765306a637675737a797674353a35393934373435333539383600000000000000000000000000000000000000000000000000";
+const testLabel = "Deposit with Expiry"; // <= Name of the test
+const testDirSuffix = "deposit_with_expiry"; // <= directory to compare device snapshots to
 const testNetwork = "ethereum";
+
 const signedPlugin = false;
 
 const devices = [
@@ -50,7 +23,8 @@ const devices = [
   }
 ];
 
+devices.forEach((device) =>
+  processTest(device, contractName, testLabel, testDirSuffix, rawTxHex, signedPlugin,"",testNetwork)
+);
 
-
-nano_models.forEach((device) => processTest(device, contractName, testLabel, testDirSuffix, "", signedPlugin, serializedTx, testNetwork))
 

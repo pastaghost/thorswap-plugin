@@ -2,14 +2,13 @@
 // You will also need to create a `b2c.json` file that will hold the methodIDs and location of
 // the erc20 tokens that should get displayed.
 // EDIT THIS: replace with the name of your plugin (lowercase)
-const pluginFolder = "thorchain_router_v4";
+const pluginFolder = "paraswap";
 
 function serialize_data(pluginName, contractAddress, selector) {
 	const len = Buffer.from([pluginName.length]);
 	const name = Buffer.from(pluginName)
 	const address = Buffer.from(contractAddress.slice(2), "hex");
 	const methodid = Buffer.from(selector.slice(2), "hex");
-
 	// Taking .slice(2) to remove the "0x" prefix
 	return Buffer.concat([len, name, address, methodid]);
 }
@@ -20,12 +19,17 @@ function assert(condition, message) {
 	}
 }
 
-// Function to generate the plugin configuration.
+
+
+/**
+ * Function to generate the plugin configuration.
+ * @param {string} network Network of the transaction
+ * @returns {string} pluginConfig
+ */
 function generate_plugin_config(network="ethereum") {
 	
 	var fs = require('fs');
 	var files = fs.readdirSync(`networks/${network}/${pluginFolder}/abis/`);
-
 	
 	// `contracts_to_abis` holds a maping of contract addresses to abis
 	let contracts_to_abis = {};
@@ -33,7 +37,7 @@ function generate_plugin_config(network="ethereum") {
 		assert(abiFileName.toLocaleLowerCase() == abiFileName, `FAILED: File ${abiFileName} should be lower case.`);
 
 		// Strip ".json" suffix
-		let contractAddress = abiFileName.slice(0, abiFileName.length - ".json".length);
+		let contractAddress = abiFileName.slice(0, abiFileName.length - ".abi.json".length);
 		// Load abi
 		let abi = require(`../networks/${network}/${pluginFolder}/abis/${abiFileName}`);
 		// Add it to contracts
@@ -42,7 +46,6 @@ function generate_plugin_config(network="ethereum") {
 	
 	// Load the b2c.json file
 	const b2c = require(`../networks/${network}/${pluginFolder}/b2c.json`);
-
 	
 	let res = {};
 	
