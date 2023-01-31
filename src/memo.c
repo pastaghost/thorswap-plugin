@@ -2,6 +2,8 @@
 #include <string.h>
 #include "memo.h"
 
+memo_t parsed_memo;
+
 int parse_memo(memo_t *memo, char *str) {
     char delim[] = ":";  // Field delimiter
     char *token = NULL;

@@ -40,9 +40,9 @@ typedef struct memo_t {
     uint8_t fields;
 } memo_t;
 
+extern memo_t parsed_memo;
+
 int parse_memo(memo_t *memo, char *str);
 int validate_memo(memo_t *memo);
-
-static memo_t parsed_memo;
 
 #endif
