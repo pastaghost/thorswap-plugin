@@ -27,13 +27,14 @@ extern const uint32_t THORCHAIN_ROUTER_V4_SELECTORS[NUM_SELECTORS];
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 typedef struct context_t {
     // 133/160 bytes used. TODO: Verify this.
-    uint8_t vault[ADDRESS_LENGTH];
-    uint8_t asset[ADDRESS_LENGTH];
-    uint8_t amount[INT256_LENGTH];
+    memo_t *memo;  // Parsed memo data
+    char *memo_str;
     uint16_t memo_offset;
     uint16_t memo_length;
     uint16_t memo_bytes_remaining;  // Remaining number of bytes to parse
-    memo_t *memo;                   // Parsed memo data
+    uint8_t vault[ADDRESS_LENGTH];
+    uint8_t asset[ADDRESS_LENGTH];
+    uint8_t amount[INT256_LENGTH];
     uint8_t expiration[INT256_LENGTH];
     uint8_t token_found;
     uint8_t decimals;
@@ -41,9 +42,9 @@ typedef struct context_t {
 
     // For parsing data.
     uint8_t next_param;  // Set to be the next param we expect to parse.
-    uint16_t offset;     // Offset at which the array or struct starts .
-    bool go_to_offset;   // If set, will force the parsing to iterate through parameters until
-                         // `offset` is reached.
+    // uint16_t offset;     // Offset at which the array or struct starts .
+    // bool go_to_offset;   // If set, will force the parsing to iterate through parameters until
+    //                      // `offset` is reached.
 
     // For both parsing and display.
     selector_t selectorIndex;
