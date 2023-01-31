@@ -43,6 +43,6 @@ typedef struct memo_t {
 int parse_memo(memo_t *memo, char *str);
 int validate_memo(memo_t *memo);
 
-extern memo_t parsed_memo;
+static memo_t parsed_memo;
 
 #endif
