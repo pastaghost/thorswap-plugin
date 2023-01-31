@@ -34,34 +34,32 @@ void handle_init_contract(void *parameters) {
     context_t *context = (context_t *) msg->pluginContext;
 
     // Initialize the context (to 0).
-    memset(context, 0, sizeof(*context));
+    // memset(context, 0, sizeof(*context));
+
+    // Initialize struct to hold memo data and store a reference to the struct in the app context
+    // memset(&parsed_memo, 0, sizeof(parsed_memo));
+    context->memo = &parsed_memo;
 
     uint32_t selector = U4BE(msg->selector, 0);
     if (find_selector(selector,
                       THORCHAIN_ROUTER_V4_SELECTORS,
                       NUM_SELECTORS,
                       &context->selectorIndex)) {
+        PRINTF("DEBUG: **** SELECTOR NOT FOUND ****\n");
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
         return;
     }
 
-    // Set `next_param` to be the first field we expect to parse.
-    // EDIT THIS: Adapt the `cases`, and set the `next_param` to be the first parameter you expect
-    // to parse.
     switch (context->selectorIndex) {
         case DEPOSIT_WITH_EXPIRY:
             context->next_param = VAULT;
             break;
-        // Keep this
+
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             return;
     }
-
-    // Initialize struct to hold memo data and store a reference to the struct in the app context
-    memset(&parsed_memo, 0, sizeof(memo_t));
-    context->memo = &parsed_memo;
 
     // Return valid status.
     msg->result = ETH_PLUGIN_RESULT_OK;
