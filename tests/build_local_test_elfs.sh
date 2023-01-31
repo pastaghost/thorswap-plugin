@@ -4,7 +4,7 @@
 NANOS_SDK=$NANOS_SDK
 NANOSP_SDK=$NANOSP_SDK
 NANOX_SDK=$NANOX_SDK
-APP_ETHEREUM=${APP_ETHEREUM:-"/thorswap-plugin-dev/app-ethereum"}
+APP_ETHEREUM=${APP_ETHEREUM:-"/thorswap-plugin-dev/app-ethereum/"}
 
 set -e
 
@@ -64,13 +64,13 @@ main() {
     build_plugin "S"
     build_ethereum "S"
 
-    echo "* Building elfs for Nano S Plus..."
-    build_plugin "SP"
-    build_ethereum "SP"
+    # echo "* Building elfs for Nano S Plus..."
+    # build_plugin "SP"
+    # build_ethereum "SP"
 
-    echo "* Building elfs for Nano X..."
-    build_plugin "X"
-    build_ethereum "X"
+    # echo "* Building elfs for Nano X..."
+    # build_plugin "X"
+    # build_ethereum "X"
 
     echo "* Done"
 }
