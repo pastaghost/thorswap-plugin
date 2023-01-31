@@ -27,7 +27,7 @@
 // ---------- THORChain Router v4 -------------
 // Function: depositWithExpiry(address vault, address asset, uint amount, string memo, uint expiry)
 // Selector: 0x44bc937b
-static const uint32_t THORCHAIN_ROUTER_V4_DEPOSIT_WITH_EXPIRY_SELECTOR = {0x44, 0xbc, 0x93, 0x7b};
+static const uint32_t THORCHAIN_ROUTER_V4_DEPOSIT_WITH_EXPIRY_SELECTOR = 0x44bc937b;
 
 const uint32_t THORCHAIN_ROUTER_V4_SELECTORS[NUM_SELECTORS] = {
     THORCHAIN_ROUTER_V4_DEPOSIT_WITH_EXPIRY_SELECTOR};
