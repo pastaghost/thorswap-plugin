@@ -1,6 +1,10 @@
 #include "thorswap_plugin.h"
 #include "memo.h"
 
+// static char memo_str[257] = {0};
+
+// static memo_t parsed_memo = {0};
+
 static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
     for (selector_t i = 0; i < n; i++) {
         if (selector == selectors[i]) {
@@ -34,11 +38,7 @@ void handle_init_contract(void *parameters) {
     context_t *context = (context_t *) msg->pluginContext;
 
     // Initialize the context (to 0).
-    // memset(context, 0, sizeof(*context));
-
-    // Initialize struct to hold memo data and store a reference to the struct in the app context
-    // memset(&parsed_memo, 0, sizeof(parsed_memo));
-    context->memo = &parsed_memo;
+    memset(context, 0, sizeof(context_t));
 
     uint32_t selector = U4BE(msg->selector, 0);
     if (find_selector(selector,

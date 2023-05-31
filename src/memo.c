@@ -2,7 +2,12 @@
 #include <string.h>
 #include "memo.h"
 
-memo_t parsed_memo;
+// memo_t parsed_memo = {0};
+// extern char memo_str[257] = {'\0'};
+// char memo_str[257] = {0};
+
+memo_t parsed_memo = {0};  // Parsed memo data
+char memo_str[257] = {0};
 
 int parse_memo(memo_t *memo, char *str) {
     char delim[] = ":";  // Field delimiter

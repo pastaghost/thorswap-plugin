@@ -22,9 +22,25 @@ static void set_vault_ui(ethQueryContractUI_t *msg, context_t *context) {
 
 static void set_asset_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Source Asset", msg->titleLength);
-    strlcpy(msg->msg,
-            context->memo->asset,
-            MIN(sizeof(context->memo->asset) / sizeof(char), msg->msgLength));
+    strlcpy(msg->msg, "0xTESTDATA", msg->msgLength);
+    // // strlcpy(msg->msg,
+    // //         parsed_memo.asset,
+    // //         MIN(sizeof(parsed_memo.asset) / sizeof(char), msg->msgLength));
+    // // Prefix the address with `0x`.
+    // msg->msg[0] = '0';
+    // msg->msg[1] = 'x';
+
+    // // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
+    // // Setting it to `0` will make it work with every chainID :)
+    // uint64_t chainid = 0;
+
+    // // Get the string representation of the address stored in `context->vault`. Put it in
+    // // `msg->msg`.
+    // getEthAddressStringFromBinary(
+    //     context->vault,
+    //     msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+    //     msg->pluginSharedRW->sha3,
+    //     chainid);
 }
 
 static void set_amount_ui(ethQueryContractUI_t *msg, context_t *context) {
@@ -50,50 +66,64 @@ static void set_amount_ui(ethQueryContractUI_t *msg, context_t *context) {
 static void set_memo_dest_addr_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Dest. Address", msg->titleLength);
     strlcpy(msg->msg,
-            context->memo->dest_addr,
-            MIN(sizeof(context->memo->dest_addr) / sizeof(char), msg->msgLength));
+            parsed_memo.dest_addr,
+            MIN(sizeof(parsed_memo.dest_addr) / sizeof(char), msg->msgLength));
+    strlcpy(msg->msg, "0xTESTDATA", msg->msgLength);
+    // msg->msg[0] = '0';
+    // msg->msg[1] = 'x';
+
+    // // We need a random chainID for legacy reasons with `getEthAddressStringFromBinary`.
+    // // Setting it to `0` will make it work with every chainID :)
+    // uint64_t chainid = 0;
+
+    // // Get the string representation of the address stored in `parsed_memo.dest_addr`. Put it
+    // in
+    // // `msg->msg`.
+    // getEthAddressStringFromBinary(
+    //     parsed_memo.dest_addr,
+    //     msg->msg + 2,  // +2 here because we've already prefixed with '0x'.
+    //     msg->pluginSharedRW->sha3,
+    //     chainid);
 }
 
 static void set_memo_limit_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Limit", msg->titleLength);
     strlcpy(msg->msg,
-            context->memo->limit,
-            MIN(sizeof(context->memo->limit) / sizeof(char), msg->msgLength));
+            parsed_memo.limit,
+            MIN(sizeof(parsed_memo.limit) / sizeof(char), msg->msgLength));
 }
 
 static void set_memo_affiliate_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Affiliate", msg->titleLength);
     strlcpy(msg->msg,
-            context->memo->affiliate,
-            MIN(sizeof(context->memo->affiliate) / sizeof(char), msg->msgLength));
+            parsed_memo.affiliate,
+            MIN(sizeof(parsed_memo.affiliate) / sizeof(char), msg->msgLength));
 }
 
 static void set_memo_fee_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Fee", msg->titleLength);
-    strlcpy(msg->msg,
-            context->memo->fee,
-            MIN(sizeof(context->memo->fee) / sizeof(char), msg->msgLength));
+    strlcpy(msg->msg, parsed_memo.fee, MIN(sizeof(parsed_memo.fee) / sizeof(char), msg->msgLength));
 }
 
 static void set_memo_dex_aggregator_addr_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Dex Aggregator Addr", msg->titleLength);
     strlcpy(msg->msg,
-            context->memo->dex_aggregator_addr,
-            MIN(sizeof(context->memo->dex_aggregator_addr) / sizeof(char), msg->msgLength));
+            parsed_memo.dex_aggregator_addr,
+            MIN(sizeof(parsed_memo.dex_aggregator_addr) / sizeof(char), msg->msgLength));
 }
 
 static void set_memo_final_token_addr_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Final Token Addr", msg->titleLength);
     strlcpy(msg->msg,
-            context->memo->final_token_addr,
-            MIN(sizeof(context->memo->final_token_addr) / sizeof(char), msg->msgLength));
+            parsed_memo.final_token_addr,
+            MIN(sizeof(parsed_memo.final_token_addr) / sizeof(char), msg->msgLength));
 }
 
 static void set_memo_min_amount_out_ui(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Min Amount Out", msg->titleLength);
     strlcpy(msg->msg,
-            context->memo->min_amount_out,
-            MIN(sizeof(context->memo->min_amount_out) / sizeof(char), msg->msgLength));
+            parsed_memo.min_amount_out,
+            MIN(sizeof(parsed_memo.min_amount_out) / sizeof(char), msg->msgLength));
 }
 
 void handle_query_contract_ui(void *parameters) {

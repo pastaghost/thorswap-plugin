@@ -19,7 +19,7 @@ typedef enum {
     MEMO_LENGTH,  // Number of characters in memo
     MEMO,         // THORChain memo string
     EXPIRATION,   // Expiration timestamp
-    UNEXPECTED_PARAMETER
+    NONE
 } parameter;
 
 extern const uint32_t THORCHAIN_ROUTER_V4_SELECTORS[NUM_SELECTORS];
@@ -27,8 +27,8 @@ extern const uint32_t THORCHAIN_ROUTER_V4_SELECTORS[NUM_SELECTORS];
 // Shared global memory with Ethereum app. Must be at most 5 * 32 bytes.
 typedef struct context_t {
     // 133/160 bytes used. TODO: Verify this.
-    memo_t *memo;  // Parsed memo data
-    char *memo_str;
+    // memo_t *memo;  // Parsed memo data
+    // char *memo_str;
     uint16_t memo_offset;
     uint16_t memo_length;
     uint16_t memo_bytes_remaining;  // Remaining number of bytes to parse

@@ -7,7 +7,7 @@ void handle_finalize(void *parameters) {
 
     msg->uiType = ETH_UI_TYPE_GENERIC;
 
-    msg->numScreens = 3 + NUM_MEMO_FIELDS(context->memo);
+    msg->numScreens = 3 + NUM_MEMO_FIELDS(&parsed_memo);
 
     // EDIT THIS: set `tokenLookup1` (and maybe `tokenLookup2`) to point to
     // token addresses you will info for (such as decimals, ticker...).

@@ -25,7 +25,8 @@ enum errors {
     ERROR_MISSING_AFFILIATE,
     ERROR_MISSING_DEX_AGGREGATOR_ADDR,
     ERROR_MISSING_FINAL_TOKEN_ADDR,
-    ERROR_MISSING_MIN_AMOUNT_OUT
+    ERROR_MISSING_MIN_AMOUNT_OUT,
+    ERROR_PARSING_INCOMPLETE
 };
 
 typedef struct memo_t {
@@ -40,7 +41,8 @@ typedef struct memo_t {
     uint8_t fields;
 } memo_t;
 
-extern memo_t parsed_memo;
+extern memo_t parsed_memo;  // Parsed memo data
+extern char memo_str[257];
 
 int parse_memo(memo_t *memo, char *str);
 int validate_memo(memo_t *memo);
