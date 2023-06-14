@@ -59,20 +59,22 @@ static void handle_memo_length(ethPluginProvideParameter_t *msg, context_t *cont
 }
 
 static int handle_memo(ethPluginProvideParameter_t *msg, context_t *context) {
-    // static char memo_str[257] = {0};
-    // PRINTF("DEBUG: **** HANDLING MEMO PARAMETER ****\n");
+    static char memo_str[257] = {0};
+    PRINTF("DEBUG: **** HANDLING MEMO PARAMETER ****\n");
     // debug_print_context(context, msg->pluginSharedRW->sha3);
 
-    // uint8_t memo_str_offset = context->memo_length - context->memo_bytes_remaining;
+    uint8_t memo_str_offset = context->memo_length - context->memo_bytes_remaining;
     uint8_t n_bytes_to_convert = MIN(PARAMETER_LENGTH, context->memo_bytes_remaining);
-    // PRINTF("MEMO_STR_OFFSET: %d\n", memo_str_offset);
-    // PRINTF("N_BYTES_TO_CONVERT: %d\n", n_bytes_to_convert);
-    // // memmove(&(memo_str[memo_str_offset]), msg->parameter, n_bytes_to_convert);
-    // memcpy(&(memo_str[memo_str_offset]), msg->parameter, n_bytes_to_convert);
-    // // strlcpy(&memo_str[memo_str_offset], msg->parameter, n_bytes_to_convert + 1);
-    // PRINTF("CURRENT MEMO STRING. %s\n", memo_str);
+    PRINTF("MEMO_STR_OFFSET: %d\n", memo_str_offset);
+    PRINTF("N_BYTES_TO_CONVERT: %d\n", n_bytes_to_convert);
+    // memcpy((void *) &(memo_str[memo_str_offset]), (void *) msg->parameter, n_bytes_to_convert);
+    // memcpy((void *) &(memo_str), (void *) msg->parameter, n_bytes_to_convert);
 
-    context->memo_bytes_remaining -= n_bytes_to_convert;
+    // strlcpy(&memo_str[memo_str_offset], msg->parameter, n_bytes_to_convert);
+    // PRINTF("CURRENT MEMO STRING: %.*H\n", 32, memo_str);
+    PRINTF("CURRENT MEMO STRING: %s\n", memo_str);
+
+    // context->memo_bytes_remaining -= n_bytes_to_convert;
     // PRINTF("MEMO_BYTES_REMAINING: %d\n", context->memo_bytes_remaining);
     if (context->memo_bytes_remaining == 0) {
         // PRINTF("****** DECODING MEMO ****** %s\n", memo_str);
