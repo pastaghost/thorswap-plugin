@@ -42,7 +42,7 @@ typedef struct memo_t {
 } memo_t;
 
 extern memo_t parsed_memo;  // Parsed memo data
-extern char memo_str[257];
+// extern char memo_str[257];
 
 int parse_memo(memo_t *memo, char *str);
 int validate_memo(memo_t *memo);
