@@ -13,13 +13,13 @@ const devices = [
   {
     name: "nanos",
     label: "Nano S",
-    steps: 9 // <= Define the number of steps for this test case and this device
+    steps: 10 // <= Define the number of steps for this test case and this device
   },
-  {
-    name: "nanox",
-    label: "Nano X",
-    steps: 5 // <= Define the number of steps for this test case and this device
-  }
+  // {
+  //   name: "nanox",
+  //   label: "Nano X",
+  //   steps: 9 // <= Define the number of steps for this test case and this device
+  // }
 ];
 
 devices.forEach((device) =>
